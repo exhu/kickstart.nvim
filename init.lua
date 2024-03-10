@@ -851,5 +851,7 @@ require('lspconfig').serve_d.setup {
   --['cmd'] = { '/home/yur/local-src/serve-d/serve-d' },
 }
 
+vim.o.colorcolumn = '80'
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
