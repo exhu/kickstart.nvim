@@ -284,6 +284,7 @@ require('lazy').setup({
         ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
         ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
         ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
+        ['<leader>k'] = { name = '[K]eyboard layout', _ = 'which_key_ignore' },
       }
     end,
   },
@@ -765,7 +766,34 @@ require('lazy').setup({
       --  and try some other statusline plugin
       local statusline = require 'mini.statusline'
       -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
+      statusline.setup {
+        use_icons = vim.g.have_nerd_font,
+        content = {
+          active = function()
+            local mode, mode_hl = MiniStatusline.section_mode { trunc_width = 120 }
+            local git = MiniStatusline.section_git { trunc_width = 75 }
+            local diagnostics = MiniStatusline.section_diagnostics { trunc_width = 75 }
+            local filename = MiniStatusline.section_filename { trunc_width = 140 }
+            local fileinfo = MiniStatusline.section_fileinfo { trunc_width = 120 }
+            local location = MiniStatusline.section_location { trunc_width = 75 }
+            local search = MiniStatusline.section_searchcount { trunc_width = 75 }
+
+            -- Usage of `MiniStatusline.combine_groups()` ensures highlighting and
+            -- correct padding with spaces between groups (accounts for 'missing'
+            -- sections, etc.)
+            return MiniStatusline.combine_groups {
+              { hl = mode_hl, strings = { mode } },
+              { hl = 'MiniStatuslineDevinfo', strings = { git, diagnostics } },
+              '%<', -- Mark general truncate point
+              { hl = 'MiniStatuslineFilename', strings = { filename } },
+              '%=', -- End left alignment
+              { hl = 'MiniStatuslineFileinfo', strings = { fileinfo } },
+              { hl = mode_hl, strings = { search, location } },
+              '%k',
+            }
+          end,
+        },
+      }
 
       -- You can configure sections in the statusline by overriding their
       -- default behavior. For example, here we set the section for
@@ -857,3 +885,16 @@ vim.o.colorcolumn = '80'
 -- vim: ts=2 sts=2 sw=2 et
 
 vim.keymap.set('n', '<leader>p', "<cmd>let @+ = expand('%:p')<CR>", { desc = 'Copy file path to clipboard +' })
+
+vim.keymap.set('n', '<leader>kr', '<cmd>set keymap=russian-jcukenwin<CR>', { desc = 'ru keyboard layout' })
+vim.keymap.set('n', '<leader>kb', '<cmd>set keymap=belarusian-jcuken<CR>', { desc = 'be keyboard layout' })
+vim.keymap.set('n', '<leader>kl', '<cmd>set keymap=lithuanian-baltic<CR>', { desc = 'lt keyboard layout' })
+
+--[[ noremap <Leader>ru :set keymap=russian-jcukenwin<CR>
+noremap <Leader>be :set keymap=belarusian-jcuken<CR>
+noremap <Leader>lt :set keymap=lithuanian-baltic<CR>
+
+" surround with {}
+vnoremap <Space>{ c{<CR><C-R>"}<Esc>v`[gq
+" override method (run on the line with copied declaration)
+noremap <Space>m ^ioverride<Space><Esc>f;cw<CR>{<CR>}<Esc>ko ]]
