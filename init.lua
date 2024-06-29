@@ -538,9 +538,10 @@ require('lazy').setup({
       local servers = {
         --serve_d = {},
         clangd = {},
-        -- gopls = {},
+        gopls = {},
         -- pyright = {},
         rust_analyzer = {},
+        ocamllsp = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -576,6 +577,8 @@ require('lazy').setup({
             },
           },
         },
+
+        nimlangserver = {},
       }
 
       -- Ensure the servers and tools above are installed
@@ -900,3 +903,20 @@ noremap <Leader>lt :set keymap=lithuanian-baltic<CR>
 vnoremap <Space>{ c{<CR><C-R>"}<Esc>v`[gq
 " override method (run on the line with copied declaration)
 noremap <Space>m ^ioverride<Space><Esc>f;cw<CR>{<CR>}<Esc>ko ]]
+
+-- trigger `autoread` when files changes on disk
+vim.opt.autoread = true
+vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold', 'CursorHoldI' }, {
+  desc = 'trigger `autoread` when files changes on disk',
+  group = vim.api.nvim_create_augroup('autoreadonfocus', { clear = true }),
+  callback = function()
+    vim.cmd [[if mode() != 'c' | checktime | endif]]
+  end,
+})
+vim.api.nvim_create_autocmd({ 'FileChangedShellPost' }, {
+  desc = 'display message when changed files reloaded',
+  group = vim.api.nvim_create_augroup('msgonautoread', { clear = true }),
+  callback = function()
+    vim.cmd [[echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None]]
+  end,
+})
