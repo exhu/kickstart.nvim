@@ -562,6 +562,7 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
+        pylsp = {},
         -- clangd = {},
         -- gopls = {},
         -- pyright = {},
@@ -909,6 +910,20 @@ require('lazy').setup({
 
 vim.cmd.colorscheme 'darkblue'
 vim.opt.colorcolumn = '80'
+
+-- noremap <Leader>be :set keymap=belarusian-jcuken<CR>
+-- set keymap=lithuanian-baltic
+-- noremap <Leader>ru :set keymap=russian-jcukenwin<CR>
+
+vim.keymap.set('n', '<leader>kb', function()
+  vim.o.keymap = 'belarusian-jcuken'
+end, { desc = 'Keymap BE' })
+vim.keymap.set('n', '<leader>kl', function()
+  vim.o.keymap = 'lithuanian-baltic'
+end, { desc = 'Keymap LT' })
+vim.keymap.set('n', '<leader>kr', function()
+  vim.o.keymap = 'russian-jcukenwin'
+end, { desc = 'Keymap RU' })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
