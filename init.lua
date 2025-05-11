@@ -1022,5 +1022,9 @@ vim.keymap.set('n', '<leader>kr', function()
   vim.o.keymap = 'russian-jcukenwin'
 end, { desc = 'Keymap RU' })
 
+-- set ripgrep as command for grep
+vim.opt.grepprg = 'rg --vimgrep'
+vim.opt.grepformat = '%f:%l:%c:%m'
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
