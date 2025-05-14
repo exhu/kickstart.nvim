@@ -1026,5 +1026,7 @@ end, { desc = 'Keymap RU' })
 vim.opt.grepprg = 'rg --vimgrep'
 vim.opt.grepformat = '%f:%l:%c:%m'
 
+-- works with neovim v0.11.1
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
